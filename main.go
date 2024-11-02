@@ -40,7 +40,7 @@ func doRequest(r *http.Request) {
 	for {
 		resp, err := http.DefaultClient.Do(r)
 		if err != nil {
-			logf(LogLevelFatal, "Doing request: %+v", err)
+			logf(LogLevelError, "%s;%s;;%+v", METHOD, r.URL.Host, err)
 		}
 
 		if resp.StatusCode >= 200 && resp.StatusCode < 300 {
