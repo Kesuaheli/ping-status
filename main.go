@@ -38,16 +38,18 @@ func main() {
 }
 
 func doRequest(r *http.Request) {
+	var count uint64
 	for {
+		count++
 		resp, err := http.DefaultClient.Do(r)
 		if err != nil {
-			logf(LogLevelError, "%s;%s;;request err: %+v", METHOD, r.URL.Host, err.(*url.Error))
+			logf(LogLevelError, "#%06X;%s;%s;;request err: %+v", count, METHOD, r.URL.Host, err.(*url.Error))
 		} else if resp.StatusCode >= 200 && resp.StatusCode < 300 {
 			// Status 2xx
-			logf(LogLevelInfo, "%s;%s;%s", METHOD, r.URL.Host, resp.Status)
+			logf(LogLevelInfo, "#%06X;%s;%s;%s", count, METHOD, r.URL.Host, resp.Status)
 		} else {
 			// Status 1xx, 3xx, 4xx, 5xx
-			logf(LogLevelError, "%s;%s;%s;bad status: %+v", METHOD, r.URL.Host, resp.Status, resp.Header)
+			logf(LogLevelError, "#%06X;%s;%s;%s;bad status: %+v", count, METHOD, r.URL.Host, resp.Status, resp.Header)
 		}
 		time.Sleep(SLEEP_SEC * time.Second)
 	}
